@@ -362,10 +362,46 @@ app.put('/api/updateindexesforinformationpass', (req, res) => {
 });
 
 
+
+
 // Serve the favicon.ico file
 app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, 'favicon.ico'));
 });
+
+app.get('/src/*', (req, res) => {
+    const filePath = path.join(__dirname, 'src', req.params[0]);
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send('File not found');
+    }
+});
+
+app.get('/styles/*', (req, res) => {
+    const filePath = path.join(__dirname, 'styles', req.params[0]);
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        console.log('Requested file path:', filePath);
+        res.status(404).send('File not found');
+    }
+});
+app.get('/data.json', (req, res) => {
+    res.sendFile(path.join(__dirname, 'data.json'));
+
+});
+app.get('/*', (req, res) => {
+    const filePath = path.join(__dirname, 'public', req.params[0])+'.html';
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send('File not found');
+    }
+});
+
+
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
